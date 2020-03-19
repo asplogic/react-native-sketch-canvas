@@ -78,6 +78,14 @@ class SketchCanvas extends React.Component {
     text: null
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (rops.text) {
+      return props.text.map(t => Object.assign({}, t))
+    }
+
+    return null;
+  }
+
   constructor(props) {
     super(props)
     this._pathsToProcess = []
@@ -90,12 +98,6 @@ class SketchCanvas extends React.Component {
     this._initialized = false
 
     this.state.text = this._processText(props.text ? props.text.map(t => Object.assign({}, t)) : null)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      text: this._processText(nextProps.text ? nextProps.text.map(t => Object.assign({}, t)) : null)
-    })
   }
 
   _processText(text) {
@@ -152,7 +154,7 @@ class SketchCanvas extends React.Component {
     }
   }
 
-  componentWillMount() {
+  async componentDidMount() {
     this.panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -215,9 +217,7 @@ class SketchCanvas extends React.Component {
         return true;
       },
     });
-  }
 
-  async componentDidMount() {
     const isStoragePermissionAuthorized = await requestPermissions(
       this.props.permissionDialogTitle,
       this.props.permissionDialogMessage,
