@@ -79,7 +79,7 @@ class SketchCanvas extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (rops.text) {
+    if (props.text) {
       return props.text.map(t => Object.assign({}, t))
     }
 
